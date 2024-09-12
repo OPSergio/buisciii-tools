@@ -11,7 +11,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 Code contributions to the new version:
 
 ### Template fixes and updates
-
+- Fixed path to blast database and update Emmtyper params [#339](https://github.com/BU-ISCIII/buisciii-tools/pull/339)
+- Updated sarek version (v3.4.4) in ExomeEB-ExomeTrio-WGSTrio templates [#341] (https://github.com/BU-ISCIII/buisciii-tools/pull/341)
 ### Modules
 
 #### Added enhancements
