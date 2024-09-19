@@ -63,12 +63,36 @@ class Scratch:
         )
         self.conf = conf.get_configuration("scratch_copy")
 
-        self.resolution_info = rest_api.get_request(
-            request_info="service-data", safe=True, resolution=self.resolution_id
+        # Check for available resolutions and search for the requested resolution
+        service_id = self.resolution_info.get("service_id", "Unknown Service")
+        resolutions = self.resolution_info.get("resolutions", [])
+
+        if not resolutions:
+            stderr.print(
+                f"[red]ERROR: Resolution {self.resolution_id} does not exist "
+                f"for service {service_id}",
+                highlight=False
+            )
+            sys.exit(1)
+
+        # Search for the requested resolution
+        resolution = next(
+            (res for res in resolutions if res["resolution_full_number"] == self.resolution_id),
+            None
         )
-        self.service_folder = self.resolution_info["resolutions"][0][
-            "resolution_full_number"
-        ]
+
+        if resolution is None:
+            stderr.print(
+                f"[red]ERROR: Resolution {self.resolution_id} does not exist "
+                f"for service {service_id}",
+                highlight=False
+            )
+            sys.exit(1)
+
+        # Assign the service folder if the resolution is found.
+        self.service_folder = resolution["resolution_full_number"]
+
+
         self.scratch_tmp_path = os.path.join(self.tmp_dir, self.service_folder)
         # params like --chdir, --partition and --time
         srun_params = self.conf["srun_settings"].items()
